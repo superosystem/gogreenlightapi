@@ -38,4 +38,10 @@ $ dotnet sln add src/core/Travel.Application/Travel.Application.csproj
 $ dotnet sln add src/infrastructure/Travel.Data/Travel.Data.csproj
 $ dotnet sln add src/infrastructure/Travel.Shared/Travel.Shared.csproj
 $ dotnet sln add src/presentation/Travel.WebApi/Travel.WebApi.csproj
+## Make Migration
+### On Travel.Data
+$ dotnet ef migrations add InitialCreate --startup-project ../../presentation/Travel.WebApi/
+### Create Database
+$ dotnet ef database update --startup-project ../../presentation/Travel.WebApi/
+$ dotnet ef database update --startup-project ../../presentation/Travel.WebApi/
 ```
