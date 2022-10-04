@@ -44,4 +44,16 @@ $ dotnet ef migrations add InitialCreate --startup-project ../../presentation/Tr
 ### Create Database
 $ dotnet ef database update --startup-project ../../presentation/Travel.WebApi/
 $ dotnet ef database update --startup-project ../../presentation/Travel.WebApi/
+## CQRS - MeadiatR
+### Travel.Application
+$ dotnet add package MediatR
+$ dotnet add package MediatR.Extensions.Microsoft.DependencyInjection
+$ dotnet add package MediatR.Extensions.Microsoft.Logging.Abstractions
+### FluentValidation
+$ dotnet add package FluentValidation
+$ dotnet add package FluentValidation.DependencyInjectionExtensions
+$ dotnet add package Microsoft.EntityFrameworkCore
+### AutoMapper
+$ dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
 ```
+
