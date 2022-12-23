@@ -10,9 +10,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/golang-migrate/migrate"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/gusrylmubarok/gogreenlight-api/internal/data"
 	_ "github.com/lib/pq"
 )
 
@@ -32,6 +30,7 @@ type config struct {
 type application struct {
 	config config
 	logger *log.Logger
+	models data.Models
 }
 
 func main() {
@@ -39,7 +38,7 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
-	flag.StringVar(&cfg.db.dsn, "db-dsn", "postgres://greenlight:my-secret-pw@localhost/greenlight?sslmode=disable", "PostgreSQL DSN")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", "postgres://postgres:my-secret-pw@localhost/greenlight?sslmode=disable", "PostgreSQL DSN")
 	flag.IntVar(&cfg.db.maxOpenConns, "db-max-open-conns", 25, "PostgreSQL max open connections")
 	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "PostgreSQL max idle connections")
 	flag.StringVar(&cfg.db.maxIdleTime, "db-max-idle-time", "15m", "PostgreSQL max connection idle time")
@@ -55,26 +54,27 @@ func main() {
 
 	logger.Printf("database connection pool established")
 
-	migrationDriver, err := postgres.WithInstance(db, &postgres.Config{})
-	if err != nil {
-		logger.Fatal(err, nil)
-	}
+	// migrationDriver, err := postgres.WithInstance(db, &postgres.Config{})
+	// if err != nil {
+	// 	logger.Fatal(err, nil)
+	// }
 
-	migrator, err := migrate.NewWithDatabaseInstance("file:///path/to/your/migrations", "postgres", migrationDriver)
-	if err != nil {
-		logger.Fatal(err, nil)
-	}
+	// migrator, err := migrate.NewWithDatabaseInstance("file:///path/to/your/migrations", "postgres", migrationDriver)
+	// if err != nil {
+	// 	logger.Fatal(err, nil)
+	// }
 
-	err = migrator.Up()
-	if err != nil && err != migrate.ErrNoChange {
-		logger.Fatal(err, nil)
-	}
+	// err = migrator.Up()
+	// if err != nil && err != migrate.ErrNoChange {
+	// 	logger.Fatal(err, nil)
+	// }
 
-	logger.Printf("database migrations applied.")
+	// logger.Printf("database migrations applied.")
 
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: data.NewModels(db),
 	}
 
 	mux := http.NewServeMux()
