@@ -10,6 +10,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/golang-migrate/migrate"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
@@ -52,6 +55,23 @@ func main() {
 
 	logger.Printf("database connection pool established")
 
+	migrationDriver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		logger.Fatal(err, nil)
+	}
+
+	migrator, err := migrate.NewWithDatabaseInstance("file:///path/to/your/migrations", "postgres", migrationDriver)
+	if err != nil {
+		logger.Fatal(err, nil)
+	}
+
+	err = migrator.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		logger.Fatal(err, nil)
+	}
+
+	logger.Printf("database migrations applied.")
+
 	app := &application{
 		config: cfg,
 		logger: logger,
@@ -78,7 +98,7 @@ func openDB(cfg config) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	db.SetMaxOpenConns(cfg.db.maxOpenConns)
 	db.SetMaxIdleConns(cfg.db.maxIdleConns)
 	duration, err := time.ParseDuration(cfg.db.maxIdleTime)
