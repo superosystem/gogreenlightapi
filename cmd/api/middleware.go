@@ -4,7 +4,6 @@ import (
 	"errors"
 	"expvar"
 	"fmt"
-	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,7 +12,8 @@ import (
 
 	"github.com/felixge/httpsnoop"
 	"github.com/gusrylmubarok/gogreenlight-api/internal/data"
-	"github.com/gusrylmubarok/gogreenlight-api/internal/validator"
+	"github.com/pascaldekloe/jwt"
+	"github.com/tomasen/realip"
 	"golang.org/x/time/rate"
 )
 
@@ -55,11 +55,7 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if app.config.limiter.enabled {
-			ip, _, err := net.SplitHostPort(r.RemoteAddr)
-			if err != nil {
-				app.serverErrorResponse(w, r, err)
-				return
-			}
+			ip := realip.FromRequest(r)
 			mu.Lock()
 			if _, found := clients[ip]; !found {
 				clients[ip] = &client{
@@ -98,13 +94,35 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 
 		token := headerParts[1]
 
-		v := validator.New()
-		if data.ValidateTokenPlaintext(v, token); !v.Valid() {
+		claims, err := jwt.HMACCheck([]byte(token), []byte(app.config.jwt.secret))
+		if err != nil {
 			app.invalidAuthenticationTokenResponse(w, r)
 			return
 		}
 
-		user, err := app.models.Users.GetForToken(data.ScopeAuthentication, token)
+		// Check if the JWT is still valid at this moment in time.
+		if !claims.Valid(time.Now()) {
+			app.invalidAuthenticationTokenResponse(w, r)
+			return
+		}
+		// Check that the issuer is our application.
+		if claims.Issuer != "greenlight.com" {
+			app.invalidAuthenticationTokenResponse(w, r)
+			return
+		}
+		// Check that our application is in the expected audiences for the JWT.
+		if !claims.AcceptAudience("greenlight.com") {
+			app.invalidAuthenticationTokenResponse(w, r)
+			return
+		}
+
+		userID, err := strconv.ParseInt(claims.Subject, 10, 64)
+		if err != nil {
+			app.serverErrorResponse(w, r, err)
+			return
+		}
+
+		user, err := app.models.Users.Get(userID)
 		if err != nil {
 			switch {
 			case errors.Is(err, data.ErrRecordNotFound):
@@ -112,12 +130,10 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 			default:
 				app.serverErrorResponse(w, r, err)
 			}
-
 			return
 		}
-
+		// Add the user record to the request context and continue as normal.
 		r = app.contextSetUser(r, user)
-
 		next.ServeHTTP(w, r)
 	})
 }
