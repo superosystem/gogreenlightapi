@@ -4,7 +4,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/validator"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/validator"
 )
 
 type Filters struct {

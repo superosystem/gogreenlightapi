@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/felixge/httpsnoop"
-	"github.com/gusrylmubarok/gogreenlight-api/internal/data"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/data"
 	"github.com/pascaldekloe/jwt"
 	"github.com/tomasen/realip"
 	"golang.org/x/time/rate"

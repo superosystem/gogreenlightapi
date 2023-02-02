@@ -8,7 +8,7 @@ import (
 	"encoding/base32"
 	"time"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/validator"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/validator"
 )
 
 const (

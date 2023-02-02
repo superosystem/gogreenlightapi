@@ -7,7 +7,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/validator"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/validator"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -153,7 +153,7 @@ func (m UserModel) Get(id int64) (*User, error) {
 			return nil, err
 		}
 	}
-	
+
 	return &user, nil
 }
 

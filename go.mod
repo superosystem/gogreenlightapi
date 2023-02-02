@@ -1,4 +1,4 @@
-module github.com/gusrylmubarok/gogreenlight-api
+module github.com/gusrylmubarok/gogreenlightapi
 
 go 1.19
 

@@ -1,2 +1,3 @@
 # for real project add .envrc
 bin/
+.envrc

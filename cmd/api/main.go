@@ -12,9 +12,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/data"
-	"github.com/gusrylmubarok/gogreenlight-api/internal/jsonlog"
-	"github.com/gusrylmubarok/gogreenlight-api/internal/mailer"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/data"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/jsonlog"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/mailer"
 	_ "github.com/lib/pq"
 )
 

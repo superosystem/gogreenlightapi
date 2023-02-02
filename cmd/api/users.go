@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/data"
-	"github.com/gusrylmubarok/gogreenlight-api/internal/validator"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/data"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/validator"
 )
 
 func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Request) {

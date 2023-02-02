@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/validator"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/validator"
 	"github.com/lib/pq"
 )
 
@@ -93,7 +93,7 @@ func (m MovieModel) GetAll(title string, genres []string, filters Filters) ([]*M
 
 	rows, err := m.DB.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil,Metadata{}, err
+		return nil, Metadata{}, err
 	}
 
 	defer rows.Close()

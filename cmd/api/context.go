@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gusrylmubarok/gogreenlight-api/internal/data"
+	"github.com/gusrylmubarok/gogreenlightapi/internal/data"
 )
 
 type contextKey string
