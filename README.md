@@ -19,4 +19,4 @@
 - [x] Cross Origin Requests
 - [x] Metrics
 - [x] Building, Versioning, and Quality Control
-- [ ] Deployment and Hosting
+- [x] Deployment and Hosting
